@@ -65,16 +65,27 @@ while True:
                     file_size = os.path.getsize(text)
                     n_frames = file_size // (width*height*3 // 2)
                     f = open(text, 'rb')
-                    
-                    #getting the frame values
-                    for i in range(n_frames):
-                       yuv = np.frombuffer(f.read(width*height*3//2), dtype=np.uint8).reshape((height*3//2, width))
-                       bgr = cv.cvtColor(yuv, cv.COLOR_YUV2BGR_I420)
-                        #Displays the YUV file
-                       cv.imshow('Video Interface', bgr)
-                       
-                       if cv.waitKey(1) & 0xFF == ord('q'):
-                            cv.destroyAllWindows()
+                    yuv = np.frombuffer(f.read(width*height*3//2), dtype=np.uint8).reshape((height*3//2, width))
+                    bgr = cv.cvtColor(yuv, cv.COLOR_YUV2BGR_I420)
+
+                    #converts to ong file
+                    image = cv.imwrite('bgr.png', bgr)
+                    layout2 = [
+                    [sg.Image(filename = 'bgr.png', subsample = 2)],
+                    [sg.Button('<<'),
+                   sg.Button('Play'),
+                   sg.Button('Pause'),
+                   sg.Button('>>')]]  
+                    window2 = sg.Window('Window 2', layout2) 
+                    event2 = window2.Read()  
+                    if event2 == '>>':
+                        bgr+=1
+                    elif event2 == 'Play':
+                        bgr
+                    elif event2 == '<<':
+                        bgr-=1   
+                    elif cv.waitKey(1) & 0xFF == ord('q'):
+                                cv.destroyAllWindows()
             else: 
                 window1_active = True
                 #window2.Hide()
